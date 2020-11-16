@@ -16,7 +16,7 @@ $('.New-Text').click(function() {
             
             let text = $(document.createElement('div')).css({
                 border: '1px solid', position: 'absolute', left: 0,
-                top: '50px', cursor: 'grab',overflow:'hidden',
+                top: '80px', cursor: 'grab',overflow:'hidden',
                 width: '120', height: '120', margin: '0',
                 borderRadius: '25px'
             }).addClass('Editable-Text').append(iframe, cross).appendTo('.Text-Container').draggable({
@@ -44,16 +44,15 @@ $('.New-Text').click(function() {
           div.innerHTML = $('.Text-Container').html();
           let text = div.querySelectorAll('div');
           for(let i = 0; i<text.length; i++) {
-            $(text[i]).css({border:'none', cursor: 'default'});
+            $(text[i]).css({border:'none', cursor: 'none'});
             let cross = text[i].querySelector('.Cross');
             $(cross).remove();
             let iframe = text[i].querySelector('iframe');
             if (iframe) {
               let innerText = document.querySelectorAll('iframe')[j].contentWindow.document.body.innerText;
-              $(iframe).remove();
               let p = document.createElement('p');
+              p.style.margin = iframe.style.margin;
               p.innerText = document.querySelectorAll('iframe')[j].contentWindow.document.body.innerText;
-              p.style.margin = iframe.style.margin
               $(iframe).remove();
               text[i].appendChild(p);
               j++;
@@ -72,10 +71,11 @@ function addFoto(input) {
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
-                  let cross = $(document.createElement('div')).attr('src', 'cross.png').css({
+                  
+                let cross = $(document.createElement('img')).attr('src', 'cross.png').css({
                     position: 'absolute', width: '15px', heigth: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
                   }).click(function () {
-                  $(text).remove();
+                    $(text).remove();
                   }).addClass('Cross');
                 let img = $(document.createElement('img')).css({
                     position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
@@ -84,7 +84,7 @@ function addFoto(input) {
                 
                 let text = $(document.createElement('div')).css({
                       border: '1px solid', position: 'absolute', left: 0,
-                      top: '50px',cursor: 'grab',
+                      top: '80px',cursor: 'grab',
                       width: '120', height: '120', margin: '0',
                       borderRadius: '25px'
                 }).addClass('Editable-Text').append(img, cross).appendTo('.Text-Container').draggable().resizable();
