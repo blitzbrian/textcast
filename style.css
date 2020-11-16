@@ -3,17 +3,6 @@
   overflow: hidden;
 }
 
-label {
-  display: inline-block;
-  line-height: 2.2em;
-  padding: 0 0.62em;
-  font-size: 0.8em;
-  border-radius: 25px;
-  background-color: white;
-  border: 2px solid;
-  height: 20px;
-}
-
 .Text-Container {
   position: absolute;
   width: 100%;
