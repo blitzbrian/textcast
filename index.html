@@ -3,17 +3,24 @@
   <head>
     <title>TextCast</title>
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="style.css" rel="stylesheet" type="text/css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="script.js"></script>
   </head>
   <body>
-    <label class="New-Text">Text</label>
-    <input id="file" type='file' onchange="addFoto(this);" />
-    <label class="New-Img">Image<input id="file" type='file' onchange="addFoto(this);" /></label>
-    <label class="Backdrop">Color<input type="color" id="color"/></label>
-    <label class="Download">Save</label>
+    <nav>
+      <div class="nav-wrapper blue lighten-5">
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <label class="New-Text waves-effect waves-light btn blue lighten-2">Text</label>
+          <label class="New-Img waves-effect waves-light btn blue lighten-2">Image<input id="file" type='file' onchange="addFoto(this);"/></label>
+          <label class="Backdrop waves-effect waves-light btn blue lighten-2"><input type="color" id="color"/>Background Color</label>
+          <label class="Download waves-effect waves-light btn blue lighten-2">Save</label>
+        </ul>
+      </div>
+    </nav>
     <div class="Text-Container"></div>
   </body>
 </html>
