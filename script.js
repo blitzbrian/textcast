@@ -1,18 +1,69 @@
-let backdrop,tooltip,focused;
-
-
-document.addEventListener('DOMContentLoaded', function() {
-  M.FloatingActionButton.init(document.querySelectorAll('.fixed-action-btn'), {hoverEnabled:false});
-  tooltip = M.Tooltip.init(document.querySelectorAll('.tooltipped'));
-});
+let backdrop,tooltip,focused,nav;
+let scenes = [];
+let cScene = 0;
 
 $(document).ready(function() {
+M.FloatingActionButton.init(document.querySelectorAll('.fixed-action-btn'), {hoverEnabled:false});
+tooltip = M.Tooltip.init(document.querySelectorAll('.tooltipped'));
+nav = M.Sidenav.init(document.querySelectorAll('.sidenav'),{draggable:true,onOpenStart:function(){
+  $(scenes[cScene]).html($('.Text-Container').html());
+  $(focused).css({border:'1px solid black'});
+  focused = null;
+    html2canvas(document.querySelector('.Text-Container'),{logging:false}).then(
+                function (canvas) {
+                  $('.scene div')[cScene].innerHTML = '';
+                  let img = $(document.createElement('img')).attr({src:canvas.toDataURL()}).addClass('sceneImg').appendTo($('.scene div')[cScene]);
+                });
+}});
+$('.NewScene').click(function () {
+  let scene = $(document.createElement('div')).click(function () {
+  nav[0].close();
+  let divs = $('.scene div');
+  for(let i = 0; i<scenes.length; i++) {
+    if (divs[i] == this) {
+      cScene = i;
+      $('.Text-Container').empty();
+      $('.Text-Container').append($(scenes[cScene]).html()).css({backgroundColor:scenes[cScene][0].style.backgroundColor});
+      $('.Editable-Text').draggable({
+              start:function () {
+                $(this.querySelector('.TextDiv')).css({zIndex: '-1'});
+              },
+              stop:function () {
+                $(this.querySelector('.TextDiv')).css({zIndex: '1'});
+              },
+               containment: "window"
+            }).resizable({
+              start:function () {
+                $(this.querySelector('.TextDiv')).css({zIndex: '-1'});
+              },
+              stop:function () {
+                $(this.querySelector('.TextDiv')).css({zIndex: '1'});
+              }
+            });
+      $('.Cross').click(function () {
+              $(this.parentElement).remove();
+            })
+      $('.TextDiv').click(function () {
+              $(focused).css({border:'1px solid #000'});
+              $(this).focus();
+              $(this.parentElement).css({border:'1px solid #29b6f6'});
+              focused = $(this.parentElement);
+            })
+    };
+  }
+});
+  $('.scene').append(scene);
+  let append = $(document.createElement('div')).html(scene.html());
+  scenes.push(append);
+});
 $('.tooltipped').click(function () {
   for(let i = 0; i<tooltip.length; i++) {
     tooltip[i].close();
   }
 });
-
+$('.Scene-Button').click(function () {
+  nav[0].open();
+});
 $('.Backdrop').click(function () {
   $('#color').click();
 });
@@ -23,11 +74,11 @@ $('.New-Img').click(function () {
   $('#file').click();
 });
 $('.New-Text').click(function() {
-            let cross = $(document.createElement('img')).attr('src', 'cross.png').css({
-              position: 'absolute', width: '15px', heigth: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
+            let cross = $(document.createElement('i')).css({
+              position: 'absolute', fontSize: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
             }).click(function () {
               $(text).remove();
-            }).addClass('Cross');
+            }).addClass('Cross material-icons').append('close');
             
             let div = $(document.createElement('div')).css({
               position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
@@ -64,37 +115,52 @@ $('.New-Text').click(function() {
         
         $('.Download').click(function () {
           let j = 0;
-          let div = document.createElement('body');
-          div.style.backgroundColor = backdrop;
-          div.innerHTML = $('.Text-Container').html();
-          let text = div.querySelectorAll('div');
-          for(let i = 0; i<text.length; i++) {
-            $(text[i]).css({border:'none', cursor: 'none'});
-            let cross = text[i].querySelector('.Cross');
-            $(cross).remove();
-            let iframe = text[i].querySelector('.TextDiv');
-            console.log(iframe);
-            if (iframe) {
-              let p = document.createElement('p');
-              p.style.margin = '5%';
-              p.style.color = iframe.style.color;
-              p.style.fontFamily= '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
-              p.innerText = iframe.innerText;
-              $(iframe).remove();
-              text[i].appendChild(p);
-              j++;
+          let body = document.createElement('body');
+          body.style.cursor = 'none';
+          for(let i = 0; i<scenes.length;i++) {
+            let scene = scenes[i][0]
+            console.log(scene)
+            let div = document.createElement('div');
+            div.style.transition = 'opacity 1s ease-in-out'
+            div.style.display = 'none'
+            div.style.opacity = '0'
+            div.style.width = '100%'
+            div.style.height = '100%'
+            div.style.backgroundColor = $(scene).css('backgroundColor')
+            div.innerHTML = $(scene).html();
+            $(div).addClass('Switch-Scene')
+            let text = div.querySelectorAll('div');
+            for(let i = 0; i<text.length; i++) {
+              $(text[i]).css({border:'none', cursor: 'none'});
+              let cross = text[i].querySelector('.Cross');
+              $(cross).remove();
+              let iframe = text[i].querySelector('.TextDiv');
+              if (iframe) {
+                let p = document.createElement('p');
+                p.style.margin = '5%';
+                p.style.color = iframe.style.color;
+                p.style.fontFamily= '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
+                p.style.fontSize = iframe.style.fontSize;
+                p.innerText = iframe.innerText;
+                $(iframe).remove();
+                text[i].appendChild(p);
+                j++;
+              }
             }
+            $(body).append(div)
           }
-          div.style.overflow = 'hidden';
-          download(prompt('Filename') + '.html', div.outerHTML);
+          body.style.overflow = 'hidden';
+          let filename = prompt('Filename');
+          download(filename + '.html', '<title>'+filename+'</title>'+body.outerHTML+'<script>'+switchScene.toString()+'; switchScene()</script>');
         });
         $("#color").on('change', function() {
-          backdrop = $('#color').val();
-          $(".Text-Container").css({backgroundColor: backdrop});
+          scenes[cScene][0].style.backgroundColor = $('#color').val();
+          $(".Text-Container").css({backgroundColor: $('#color').val()});
         });
         $("#text-color").on('change', function() {
           $(focused[0].querySelector('.TextDiv')).css({color:$('#text-color').val()});
         });
+        $('.NewScene').click();
 });
 
 function addFoto(input) {
@@ -102,12 +168,11 @@ function addFoto(input) {
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
-                  
-                let cross = $(document.createElement('img')).attr('src', 'cross.png').css({
-                    position: 'absolute', width: '15px', heigth: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
-                  }).click(function () {
-                    $(text).remove();
-                  }).addClass('Cross');
+                let cross = $(document.createElement('i')).css({
+                  position: 'absolute', width: '15px', heigth: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
+                }).click(function () {
+                  $(text).remove();
+                }).addClass('Cross material-icons').append('close');
                 let img = $(document.createElement('img')).css({
                     position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
                     zIndex:'1'
@@ -116,7 +181,7 @@ function addFoto(input) {
               $(this).focus();
               $(text).css({border:'1px solid #29b6f6'});
               focused = text;
-            }).attr('src', e.target.result);
+            }).attr({src:e.target.result});
                 
                 let text = $(document.createElement('div')).css({
                       border: '1px solid', position: 'absolute', left: '80px',
@@ -141,4 +206,23 @@ function download(filename, text) {
   element.click();
 
   document.body.removeChild(element);
+}
+
+async function switchScene () {
+  const timer = ms => new Promise(res => setTimeout(res, ms))
+  let divs = document.querySelectorAll('.Switch-Scene')
+  let body = document.querySelector('body')
+  for(let i = 0; i<divs.length; i++) {
+    body.style.backgroundColor = '#fffff';
+    divs[i].style.display = 'block';
+    divs[i].style.opacity = '1'
+    await timer(1000);
+    body.style.backgroundColor = divs[i].style.backgroundColor;
+    await timer(5000);
+    body.style.backgroundColor = '#fffff';
+    divs[i].style.opacity = '0'
+    await timer(1000);
+    divs[i].style.display = 'none'
+  }
+  switchScene();
 }

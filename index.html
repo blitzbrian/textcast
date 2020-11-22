@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src= "https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"> </script>
     <script src="jquery.fittext.js"></script>
     <script src="script.js"></script>
   </head>
@@ -18,7 +19,7 @@
         <i class="large material-icons">menu</i>
       </a>
       <ul>
-        
+        <li><label class="Scene-Button waves-effect waves-light btn-floating blue lighten-2 tooltipped" data-position="left" data-tooltip="Scenes"><i class="material-icons">web_asset</i></label></li>
         <li><label class="New-Text waves-effect waves-light btn-floating blue lighten-2 tooltipped" data-position="left" data-tooltip="Add text"><i class="material-icons">add</i></label></li>
         <li><label class="New-Img waves-effect waves-light btn-floating blue lighten-2 tooltipped" data-position="left" data-tooltip="Add image"><i class="material-icons">add_a_photo</i></label></li>
         <li><label class="Backdrop waves-effect waves-light btn-floating blue lighten-2 tooltipped" data-position="left" data-tooltip="Backdrop"><i class="material-icons">color_lens</i>Background Color</label></li>
@@ -30,5 +31,9 @@
     <input type="color" id="color"/>
     <input type="color" id="text-color"/>
     <div class="Text-Container"></div>
+    <ul id="slide-out" class="sidenav">
+      <div class="scene"></div>
+      <li class="btn NewScene white z-depth-0"><i class="material-icons icon-black">add</i></li>
+    </ul>
   </body>
 </html>
