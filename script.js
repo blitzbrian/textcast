@@ -153,7 +153,7 @@ $('.New-Text').click(function() {
           }
           body.style.overflow = 'hidden';
           let filename = prompt('Filename');
-          download(filename + '.html', '<title>'+filename+'</title>'+body.outerHTML+'<script>'+switchScene.toString()+'; switchScene()</script>');
+          download(filename + '.html', '<title>'+filename+'</title>'+'<link rel="icon" type="image/png" href="https://textcast.tk/icon.png">'+body.outerHTML+'<script>'+switchScene.toString()+'; switchScene()</script>');
         });
         $("#color").on('change', function() {
           scenes[cScene][0].style.backgroundColor = $('#color').val();
