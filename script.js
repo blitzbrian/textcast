@@ -1,9 +1,11 @@
-let backdrop,tooltip,focused,nav;
+let backdrop,tooltip,focused,nav, target, menu;
 let scenes = [];
 let cScene = 0;
 
 $(document).ready(function() {
-M.FloatingActionButton.init(document.querySelectorAll('.fixed-action-btn'), {hoverEnabled:false});
+
+target = M.TapTarget.init(document.querySelectorAll('.tap-target'));
+menu = M.FloatingActionButton.init(document.querySelectorAll('.fixed-action-btn'), {hoverEnabled:false});
 tooltip = M.Tooltip.init(document.querySelectorAll('.tooltipped'));
 nav = M.Sidenav.init(document.querySelectorAll('.sidenav'),{draggable:true,onOpenStart:function(){
   $(scenes[cScene]).html($('.Text-Container').html());
@@ -161,6 +163,7 @@ $('.New-Text').click(function() {
           $(focused[0].querySelector('.TextDiv')).css({color:$('#text-color').val()});
         });
         $('.NewScene').click();
+        target[0].open();
 });
 
 function addFoto(input) {
@@ -213,13 +216,12 @@ async function switchScene () {
   let divs = document.querySelectorAll('.Switch-Scene')
   let body = document.querySelector('body')
   for(let i = 0; i<divs.length; i++) {
-    body.style.backgroundColor = '#fffff';
+    body.style.backgroundColor = divs[i].style.backgroundColor;
     divs[i].style.display = 'block';
     divs[i].style.opacity = '1'
     await timer(1000);
-    body.style.backgroundColor = divs[i].style.backgroundColor;
-    await timer(5000);
     body.style.backgroundColor = '#fffff';
+    await timer(30000);
     divs[i].style.opacity = '0'
     await timer(1000);
     divs[i].style.display = 'none'
