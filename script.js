@@ -116,6 +116,7 @@ $('.New-Text').click(function() {
         });
         
         $('.Download').click(function () {
+          $(scenes[cScene]).html($('.Text-Container').html());
           let j = 0;
           let body = document.createElement('body');
           body.style.cursor = 'none';
@@ -213,7 +214,7 @@ function download(filename, text) {
 
 async function switchScene () {
   const timer = ms => new Promise(res => setTimeout(res, ms))
-  let divs = document.querySelectorAll('.Switch-Scene')
+  let divs = document.querySelectorAll('.Switch-Scene');
   let body = document.querySelector('body')
   for(let i = 0; i<divs.length; i++) {
     body.style.backgroundColor = divs[i].style.backgroundColor;
