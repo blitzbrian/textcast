@@ -16,6 +16,37 @@ nav = M.Sidenav.init(document.querySelectorAll('.sidenav'),{draggable:true,onOpe
                   let img = $(document.createElement('img')).attr({src:canvas.toDataURL()}).addClass('sceneImg').appendTo($('.scene div')[cScene]);
                 });
 }});
+$('div[contenteditable="true"]').keypress(function(event) {
+    if (event.which != 13)
+        return true;
+
+    var docFragment = document.createDocumentFragment();
+
+    //add a new line
+    var newEle = document.createTextNode('\n');
+    docFragment.appendChild(newEle);
+
+    //add the br, or p, or something else
+    newEle = document.createElement('br');
+    docFragment.appendChild(newEle);
+
+    //make the br replace selection
+    var range = window.getSelection().getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(docFragment);
+
+    //create a new range
+    range = document.createRange();
+    range.setStartAfter(newEle);
+    range.collapse(true);
+
+    //make the cursor there
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    return false;
+});
 $('body').on('contextmenu', function (e) {
   e.preventDefault();
 });
@@ -137,7 +168,7 @@ $('.New-Text').click(function() {
           body.style.margin = '0';
           for(let i = 0; i<scenes.length;i++) {
             let scene = scenes[i][0];
-            console.log(scene);
+
             let div = document.createElement('div');
             div.style.transition = 'opacity 1s ease';
             div.style.display = 'none';
@@ -146,9 +177,11 @@ $('.New-Text').click(function() {
             div.style.height = '100vh';
             div.style.margin = 0;
             div.style.backgroundColor = $(scene).css('backgroundColor');
-            div.innerHTML = $(scene).html();
+            console.trace(scene.innerText)
+            $(div).html(scene.innerHTML);
+            console.trace(div.innerText)
             $(div).addClass('Switch-Scene');
-            let text = div.querySelectorAll('div');
+            let text = div.querySelectorAll('.Editable-Text');
             for(let i = 0; i<text.length; i++) {
               $(text[i]).css({border:'none', cursor: 'none'});
               let cross = text[i].querySelector('.Cross');
@@ -159,8 +192,14 @@ $('.New-Text').click(function() {
                 p.style.margin = '5%';
                 p.style.color = iframe.style.color;
                 p.style.fontFamily= '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
+                let divs = iframe.querySelectorAll('div');
+                divs.forEach(function (el) {
+                  $(el).after('\n' + el.innerText);
+                  $(el).remove();
+                });
                 p.style.fontSize = iframe.style.fontSize;
-                p.innerText = iframe.innerText;
+                iframe.innerHTML = iframe.innerText.replaceAll('\n','<br>');
+                p.innerHTML = iframe.innerHTML
                 $(iframe).remove();
                 text[i].appendChild(p);
                 j++;
@@ -168,6 +207,7 @@ $('.New-Text').click(function() {
             }
             $(body).append(div)
           }
+          console.log(body);
           body.style.overflow = 'hidden';
           let filename = prompt('Filename');
           download(filename + '.html', '<title>'+filename+'</title>'+'<link rel="icon" type="image/png" href="https://textcast.tk/icon.png">'+body.outerHTML+'<script>'+switchScene.toString()+'; switchScene()</script>');
@@ -266,7 +306,7 @@ function upload(input) {
                         div.style.color = iframe.style.color;
                         div.style.fontFamily= '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
                         div.style.fontSize = iframe.style.fontSize;
-                        div.innerText = iframe.innerText;
+                        div.innerHTML = iframe.innerHTML;
                         $(iframe).remove();
                         $(text[i]).append(div,cross).css({border:'1px solid #000', cursor:'drag'});
                       }
