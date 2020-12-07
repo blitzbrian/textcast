@@ -38,13 +38,6 @@ body {
   object-fit: cover;
 }
 
-.SidenavIcon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 30px
-}
-
 .sidenav {
   text-align: center;
 }
@@ -53,7 +46,7 @@ body {
   color: black;
 }
 
-#color, #text-color, #file {
+#color, #text-color, #file, #upload {
   position: absolute;
   top: 0;
   left: 0;

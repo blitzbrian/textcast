@@ -3,7 +3,6 @@ let scenes = [];
 let cScene = 0;
 
 $(document).ready(function() {
-
 target = M.TapTarget.init(document.querySelectorAll('.tap-target'));
 menu = M.FloatingActionButton.init(document.querySelectorAll('.fixed-action-btn'), {hoverEnabled:false});
 tooltip = M.Tooltip.init(document.querySelectorAll('.tooltipped'));
@@ -17,6 +16,9 @@ nav = M.Sidenav.init(document.querySelectorAll('.sidenav'),{draggable:true,onOpe
                   let img = $(document.createElement('img')).attr({src:canvas.toDataURL()}).addClass('sceneImg').appendTo($('.scene div')[cScene]);
                 });
 }});
+$('body').on('contextmenu', function (e) {
+  e.preventDefault();
+});
 $('.NewScene').click(function () {
   let scene = $(document.createElement('div')).click(function () {
   nav[0].close();
@@ -53,6 +55,15 @@ $('.NewScene').click(function () {
             })
     };
   }
+}).on('contextmenu', function (e) {
+  e.preventDefault();
+  let scene = this;
+  if(scenes.length == 1) return;
+    $(scene).click();
+    let i = $('.scene div').index(scene);
+    scenes.splice(i,1);
+    $(scene).remove();
+    $('.scene div').first().click();
 });
   $('.scene').append(scene);
   let append = $(document.createElement('div')).html(scene.html());
@@ -74,6 +85,9 @@ $('.Text-Color').click(function () {
 });
 $('.New-Img').click(function () {
   $('#file').click();
+});
+$('.Upload').click(function () {
+  $('#upload').click();
 });
 $('.New-Text').click(function() {
             let cross = $(document.createElement('i')).css({
@@ -120,18 +134,20 @@ $('.New-Text').click(function() {
           let j = 0;
           let body = document.createElement('body');
           body.style.cursor = 'none';
+          body.style.margin = '0';
           for(let i = 0; i<scenes.length;i++) {
-            let scene = scenes[i][0]
-            console.log(scene)
+            let scene = scenes[i][0];
+            console.log(scene);
             let div = document.createElement('div');
-            div.style.transition = 'opacity 1s ease-in-out'
-            div.style.display = 'none'
-            div.style.opacity = '0'
-            div.style.width = '100%'
-            div.style.height = '100%'
-            div.style.backgroundColor = $(scene).css('backgroundColor')
+            div.style.transition = 'opacity 1s ease';
+            div.style.display = 'none';
+            div.style.opacity = '0';
+            div.style.width = '100vw';
+            div.style.height = '100vh';
+            div.style.margin = 0;
+            div.style.backgroundColor = $(scene).css('backgroundColor');
             div.innerHTML = $(scene).html();
-            $(div).addClass('Switch-Scene')
+            $(div).addClass('Switch-Scene');
             let text = div.querySelectorAll('div');
             for(let i = 0; i<text.length; i++) {
               $(text[i]).css({border:'none', cursor: 'none'});
@@ -198,6 +214,93 @@ function addFoto(input) {
                 reader.readAsDataURL(input.files[0]);
             }
         }
+function upload(input) {
+  if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                  let el = document.createElement('div');
+                  $(el).html(e.target.result);
+                  let s = el.querySelectorAll('.Switch-Scene');
+                  let length = scenes.length;
+                  for(let i = 0; i<s.length; i++) {
+                  let scene = s[i]
+                  let div = document.createElement('div');
+                  let text = scene.querySelectorAll('div');
+                  for(let i = 0; i<text.length; i++) {
+                    $(text[i]).css({border:'black'});
+                    let cross = text[i].querySelector('.Cross');
+                    $(cross).remove();
+                    let iframe = text[i].querySelector('p');
+                    if (iframe) {
+                      let cross = $(document.createElement('i')).css({
+                        position: 'absolute', fontSize: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
+                      }).click(function () {
+                        $(text).remove();
+                      }).addClass('Cross material-icons').append('close');
+                      let div = document.createElement('div');
+                      $(div).css({position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
+                        zIndex:'1',padding:'10px', outline: '0px solid transparent', cursor: 'text', fontSize: '24px'
+                      }).attr('contenteditable','true').click(function () {
+                          $(focused).css({border:'1px solid #000'});
+                          $(this).focus();
+                          $(text[i]).css({border:'1px solid #29b6f6'});
+                          focused = text[i];
+                            }).addClass('TextDiv');
+                            $(text[i]).draggable({
+                            start:function () {
+                              $(div).css({zIndex: '-1'});
+                            },
+                            stop:function () {
+                              $(div).css({zIndex: '1'});
+                            },
+                             containment: "window"
+                          }).resizable({
+                            start:function () {
+                              $(div).css({zIndex: '-1'});
+                            },
+                            stop:function () {
+                              $(div).css({zIndex: '1'});
+                            }
+                        });
+                        div.style.color = iframe.style.color;
+                        div.style.fontFamily= '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
+                        div.style.fontSize = iframe.style.fontSize;
+                        div.innerText = iframe.innerText;
+                        $(iframe).remove();
+                        $(text[i]).append(div,cross).css({border:'1px solid #000', cursor:'drag'});
+                      }
+                      let image = text[i].querySelector('img');
+                      if (image) {
+                        
+                      let cross = $(document.createElement('i')).css({
+                        position: 'absolute', fontSize: '15px', zIndex: '2', cursor: 'pointer', top: '2px', left: '2px'
+                      }).click(function () {
+                        $(text).remove();
+                      }).addClass('Cross material-icons').append('close');
+                      $(image).css({position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
+                        zIndex:'1',padding:'10px', outline: '0px solid transparent', cursor: 'text', fontSize: '24px'
+                      }).click(function () {
+                          $(focused).css({border:'1px solid #000'});
+                          $(text[i]).css({border:'1px solid #29b6f6'});
+                          focused = text[i];
+                            }).addClass('TextDiv');
+                            $(text[i]).draggable({containment: "window"}).resizable();
+                        $(iframe).remove();
+                        $(text[i]).append(div,cross).css({border:'1px solid #000', cursor:'drag'});
+                      }
+                    }
+            
+                    $('.NewScene').click();
+                    $('.scene div')[scenes.length - 1].click();
+                    scenes[cScene][0].innerHTML = s[i].innerHTML;
+                  }
+                  $($('.scene div')[length]).click();
+                };
+
+                reader.readAsText(input.files[0]);
+            }
+}
         
 function download(filename, text) {
   var element = document.createElement('a');
@@ -217,12 +320,11 @@ async function switchScene () {
   let divs = document.querySelectorAll('.Switch-Scene');
   let body = document.querySelector('body')
   for(let i = 0; i<divs.length; i++) {
-    body.style.backgroundColor = divs[i].style.backgroundColor;
     divs[i].style.display = 'block';
-    divs[i].style.opacity = '1'
+    divs[i].style.opacity = '0';
     await timer(1000);
-    body.style.backgroundColor = '#fffff';
-    await timer(30000);
+    divs[i].style.opacity = '1'
+    await timer(60000);
     divs[i].style.opacity = '0'
     await timer(1000);
     divs[i].style.display = 'none'
