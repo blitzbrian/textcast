@@ -16,6 +16,15 @@ nav = M.Sidenav.init(document.querySelectorAll('.sidenav'),{draggable:true,onOpe
                   let img = $(document.createElement('img')).attr({src:canvas.toDataURL()}).addClass('sceneImg').appendTo($('.scene div')[cScene]);
                 });
 }});
+$(document).on('paste', function (e) {
+  let items = e.originalEvent.clipboardData.items;
+  let item = items[items.length - 1];
+  if (item.type.indexOf('image') == 0) {
+    e.preventDefault();
+    let forAddFoto = {files:[item.getAsFile()]};
+    addFoto(forAddFoto);
+  }
+});
 $('div[contenteditable="true"]').keypress(function(event) {
     if (event.which != 13)
         return true;
