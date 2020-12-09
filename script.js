@@ -25,37 +25,6 @@ $(document).on('paste', function (e) {
     addFoto(forAddFoto);
   }
 });
-$('div[contenteditable="true"]').keypress(function(event) {
-    if (event.which != 13)
-        return true;
-
-    var docFragment = document.createDocumentFragment();
-
-    //add a new line
-    var newEle = document.createTextNode('\n');
-    docFragment.appendChild(newEle);
-
-    //add the br, or p, or something else
-    newEle = document.createElement('br');
-    docFragment.appendChild(newEle);
-
-    //make the br replace selection
-    var range = window.getSelection().getRangeAt(0);
-    range.deleteContents();
-    range.insertNode(docFragment);
-
-    //create a new range
-    range = document.createRange();
-    range.setStartAfter(newEle);
-    range.collapse(true);
-
-    //make the cursor there
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-
-    return false;
-});
 $('body').on('contextmenu', function (e) {
   e.preventDefault();
 });
@@ -137,7 +106,7 @@ $('.New-Text').click(function() {
             }).addClass('Cross material-icons').append('close');
             
             let div = $(document.createElement('div')).css({
-              position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
+              position: 'absolute', width:'calc(100% - 20px)', height:'calc(100% - 20px)', border: 'none', margin: '10px',
               zIndex:'1',padding:'10px', outline: '0px solid transparent', cursor: 'text', fontSize: '24px'
             }).attr('contenteditable','true').click(function () {
               $(focused).css({border:'1px solid #000'});
@@ -198,7 +167,7 @@ $('.New-Text').click(function() {
               let iframe = text[i].querySelector('.TextDiv');
               if (iframe) {
                 let p = document.createElement('p');
-                p.style.margin = '5%';
+                p.style.margin = '10px';
                 p.style.color = iframe.style.color;
                 p.style.fontFamily= '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
                 let divs = iframe.querySelectorAll('div');
@@ -243,7 +212,7 @@ function addFoto(input) {
                   $(text).remove();
                 }).addClass('Cross material-icons').append('close');
                 let img = $(document.createElement('img')).css({
-                    position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
+                    position: 'absolute', width:'calc(100% - 20px)', height:'calc(100% - 20px)', border: 'none', margin: '10px',
                     zIndex:'1'
                 }).click(function () {
               $(focused).css({border:'1px solid #000'});
@@ -288,7 +257,7 @@ function upload(input) {
                         $(text).remove();
                       }).addClass('Cross material-icons').append('close');
                       let div = document.createElement('div');
-                      $(div).css({position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
+                      $(div).css({position: 'absolute', width:'calc(100% - 20px)', height:'calc(100% - 20px)', border: 'none', margin: '10px',
                         zIndex:'1',padding:'10px', outline: '0px solid transparent', cursor: 'text', fontSize: '24px'
                       }).attr('contenteditable','true').click(function () {
                           $(focused).css({border:'1px solid #000'});
@@ -327,7 +296,7 @@ function upload(input) {
                       }).click(function () {
                         $(text).remove();
                       }).addClass('Cross material-icons').append('close');
-                      $(image).css({position: 'absolute', width:'90%', height:'90%', border: 'none', margin: '5%',
+                      $(image).css({position: 'absolute', width:'calc(100% - 20px)', height:'calc(100% - 20px)', border: 'none', margin: '10px',
                         zIndex:'1',padding:'10px', outline: '0px solid transparent', cursor: 'text', fontSize: '24px'
                       }).click(function () {
                           $(focused).css({border:'1px solid #000'});
