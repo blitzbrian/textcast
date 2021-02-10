@@ -29,10 +29,11 @@ $('body').on('contextmenu', async function (e) {
   if(nav[0].isOpen) e.preventDefault() else {
     let item = navigator.clipboard.read();
     if (item.type.indexOf('image') == 0) {
-      e.preventDefault();
       let forAddFoto = {files:[item.getAsFile()]};
       addFoto(forAddFoto);
     }
+    e.preventDefault();
+    console.log(item);
   };
 });
 $('.NewScene').click(function () {
