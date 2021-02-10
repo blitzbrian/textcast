@@ -25,8 +25,15 @@ $(document).on('paste', function (e) {
     addFoto(forAddFoto);
   }
 });
-$('body').on('contextmenu', function (e) {
-  if(nav[0].isOpen) e.preventDefault();
+$('body').on('contextmenu', async function (e) {
+  if(nav[0].isOpen) e.preventDefault() else {
+    let item = navigator.clipboard.read();
+    if (item.type.indexOf('image') == 0) {
+      e.preventDefault();
+      let forAddFoto = {files:[item.getAsFile()]};
+      addFoto(forAddFoto);
+    }
+  };
 });
 $('.NewScene').click(function () {
   let scene = $(document.createElement('div')).click(function () {
