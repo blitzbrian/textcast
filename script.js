@@ -26,7 +26,7 @@ $(document).on('paste', function (e) {
   }
 });
 $('body').on('contextmenu', function (e) {
-  e.preventDefault();
+  if(nav[0].isOpen) e.preventDefault();
 });
 $('.NewScene').click(function () {
   let scene = $(document.createElement('div')).click(function () {
@@ -114,7 +114,7 @@ $('.New-Text').click(function() {
               $(text).css({border:'1px solid #29b6f6'});
               focused = text;
             }).addClass('TextDiv');
-            $(div).fitText(0.8,{minFontSize:'15px',maxFontSize:'35px'});
+            $(div).fitText(0.8,{minFontSize:'15px',maxFontSize:'45px'});
             let text = $(document.createElement('div')).css({
                 border: '1px solid', position: 'absolute', left: '80px',
                 top: '80px', cursor: 'grab',overflow:'hidden',
