@@ -28,12 +28,11 @@ $(document).on('paste', function (e) {
 $('body').on('contextmenu', async function (e) {
   if(nav[0].isOpen) e.preventDefault(); else {
     let item = await navigator.clipboard.read();
-//     if (item.type.indexOf('image') == 0) {
-//       let forAddFoto = {files:[item.getAsFile()]};
-//       addFoto(forAddFoto);
-//     }
-//     e.preventDefault();
-    console.log(item);
+    if (item[0].type.indexOf('image') == 0) {
+      let forAddFoto = {files:[item[0].getAsFile()]};
+      addFoto(forAddFoto);
+    }
+    e.preventDefault();
   };
 });
 $('.NewScene').click(function () {
