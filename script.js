@@ -237,8 +237,6 @@ function upload(input) {
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
-                  scenes = [];
-                  $('scene').children().remove();
                   let el = document.createElement('div');
                   $(el).html(e.target.result);
                   let s = el.querySelectorAll('.Switch-Scene');
