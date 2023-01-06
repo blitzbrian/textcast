@@ -339,14 +339,18 @@ async function switchScene () {
   let divs = document.querySelectorAll('.Switch-Scene');
   let body = document.querySelector('body')
   for(let i = 0; i<divs.length; i++) {
+    if(divs.length == 1) {
+          divs[0].style.display = 'block';
+          divs[0].style.opacity = '1';
+    }
     divs[i].style.display = 'block';
     divs[i].style.opacity = '0';
     await timer(1000);
-    divs[i].style.opacity = '1'
+    divs[i].style.opacity = '1';
     await timer(60000);
-    divs[i].style.opacity = '0'
+    divs[i].style.opacity = '0';
     await timer(1000);
-    divs[i].style.display = 'none'
+    divs[i].style.display = 'none';
   }
   switchScene();
 }
